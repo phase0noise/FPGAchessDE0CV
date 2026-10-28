@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 RUN_USER="${SUDO_USER:-$USER}"
 RUN_GROUP="$(id -gn "$RUN_USER")"
 SSID="DE0CV-Chess"
@@ -16,7 +16,7 @@ while [[ $# -gt 0 ]]; do
     shift
 done
 if [[ "$RUN_USER" == root ]]; then
-    echo 'Run as your normal Pi user: bash rpi/setup.sh (sudo is used where needed).' >&2
+    echo 'Run as your normal Pi user: bash setup.sh (sudo is used where needed).' >&2
     exit 1
 fi
 if $HOTSPOT && (( ${#PASSWORD} < 8 || ${#PASSWORD} > 63 || ${#SSID} < 1 || ${#SSID} > 32 )); then
@@ -28,7 +28,7 @@ sudo apt-get update
 sudo apt-get install -y python3-venv python3-spidev network-manager
 sudo raspi-config nonint do_spi 0
 sudo usermod -aG spi "$RUN_USER"
-python3 "$ROOT/python/run.py" setup --system-site-packages
+python3 "$ROOT/run.py" setup --system-site-packages
 
 if $HOTSPOT; then
     sudo systemctl enable --now NetworkManager
@@ -48,7 +48,7 @@ fi
 # Generate the unit without shell/sed interpolation of paths or user names.
 SERVICE_FILE="$(mktemp)"
 trap 'rm -f -- "$SERVICE_FILE"' EXIT
-python3 "$ROOT/python/run.py" service-unit "$RUN_USER" "$RUN_GROUP" "$SERVICE_FILE"
+python3 "$ROOT/run.py" service-unit "$RUN_USER" "$RUN_GROUP" "$SERVICE_FILE"
 sudo install -m 0644 "$SERVICE_FILE" /etc/systemd/system/de0cv-chess.service
 sudo systemctl daemon-reload
 sudo systemctl enable de0cv-chess

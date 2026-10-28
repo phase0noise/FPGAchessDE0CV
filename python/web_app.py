@@ -37,7 +37,7 @@ class HardwareManager:
                     self.link = None
 
 def create_app(factory=None):
-    web_root = Path(__file__).resolve().parents[1]/"web"
+    web_root = Path(__file__).resolve().parent/"web"
     app = Flask(__name__, static_folder=None)
     app.config["MAX_CONTENT_LENGTH"] = 162
     if factory is None:

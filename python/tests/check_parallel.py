@@ -42,7 +42,7 @@ def main():
                   specialCandidateScores=len(special_scores), specialPositions=len(special_reference),
                   reductionPercent=round(100 * (1 - totals[3] / totals[0]), 2),
                   speedup=round(totals[0] / totals[3], 3))
-    output = Path(__file__).resolve().parents[2] / '.cache/parallel_results.json'
+    output = Path(__file__).resolve().parents[1] / '.cache/parallel_results.json'
     output.write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: same {len(reference_scores)} scores, moves, nodes and cache matches; '
           f'{report["reductionPercent"]}% fewer cycles ({report["speedup"]}x throughput) on {len(results[0])} fixtures.')

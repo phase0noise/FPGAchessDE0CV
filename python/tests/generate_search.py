@@ -36,7 +36,7 @@ def main():
             lines.append(' '.join(map(str,[*position_bytes(board),len(legal),*legal,*maps,
                          encode_move(move(focus)),encode_move(move(other)),gap,
                          encode_move(move(best)) if best else -1,*committed])))
-    output=Path(__file__).resolve().parents[2]/'.cache/search_vectors.txt'
+    output=Path(__file__).resolve().parents[1]/'.cache/search_vectors.txt'
     output.parent.mkdir(exist_ok=True)
     output.write_text('\n'.join(lines)+'\n',encoding='ascii')
     print(f'Generated {len(lines)} tactical fixtures with independently checked legal moves.')

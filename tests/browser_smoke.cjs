@@ -3,9 +3,9 @@
 'use strict';
 const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const {spawn}=require('node:child_process');
-const {Position,Game,uci}=require('../web/chess.js');
-const {hex,unhex}=require('../web/fpga.js');
-const root=path.resolve(__dirname,'..');
+const {Position,Game,uci}=require('../python/web/chess.js');
+const {hex,unhex}=require('../python/web/fpga.js');
+const root=path.resolve(__dirname,'../python');
 let p=new Position(),done=false,generation=1,selected=0,requestedDepth=5;
 let endpointAvailable=true,holdSearch=false,deviceSearching=false;
 const searchDepths=[];

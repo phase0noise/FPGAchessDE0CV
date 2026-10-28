@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
-const {Position,Game,uci}=require('../web/chess.js');
+const {Position,Game,uci}=require('../python/web/chess.js');
 function perft(p,depth) {if(!depth)return 1;let n=0;for(const m of p.legalMoves())n+=perft(p.clone().make(m),depth-1);return n;}
 assert.equal(perft(new Position(),1),20);
 assert.equal(perft(new Position(),2),400);

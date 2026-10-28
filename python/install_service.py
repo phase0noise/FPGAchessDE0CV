@@ -4,8 +4,8 @@ from pathlib import Path
 
 
 def render(user, group):
-    root = Path(__file__).resolve().parents[1]
-    text = (root / "rpi/de0cv-chess.service.in").read_text(encoding="utf-8")
+    root = Path(__file__).resolve().parent
+    text = (root / "de0cv-chess.service.in").read_text(encoding="utf-8")
     # systemd specifiers and quoted paths need escaping; no shell evaluates these.
     escaped_root = str(root).replace("\\", "\\\\").replace('"', '\\"').replace("%", "%%")
     return text.replace("@ROOT@", escaped_root).replace("@USER@", user).replace("@GROUP@", group)

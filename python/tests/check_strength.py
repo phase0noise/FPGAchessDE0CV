@@ -20,7 +20,7 @@ def main():
     parser.add_argument('expanded')
     parser.add_argument('--baseline')
     args = parser.parse_args()
-    root = Path(__file__).resolve().parents[2]
+    root = Path(__file__).resolve().parents[1]
     oracle = json.loads((root / '.cache/strength_oracle.json').read_text())
     expanded = records(args.expanded)
     assert len(expanded) == len(oracle), f'Expected {len(oracle)} completed expanded-engine positions, found {len(expanded)}'

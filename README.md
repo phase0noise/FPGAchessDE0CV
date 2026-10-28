@@ -29,8 +29,9 @@ Pi service and browser files are included together in the portable bundle.
 
 ## Python tools
 
-All Python code and Python tests are in [python/](python/README.md). From this
-project folder on Windows:
+The self-contained [python/](python/README.md) folder contains the Python app,
+web assets, Pi installer and Python tests. **Copy only that folder to the Pi**;
+the rest of this project is for FPGA development. From this project folder on Windows:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File python/run.ps1 setup --dev
@@ -62,17 +63,17 @@ The driver accepts 10 kHz through 5 MHz.
 
 1. Program `output_files/de0cv_chess.sof` using Quartus Programmer, selecting
    **5CEBA4**. `tools/program_fpga.ps1` also loads it. Reload after power loss.
-2. Stop the older chess or reference service before using SPI0/CE0. Copy this
-   entire `DE0CVChessAdvanced` folder to the Raspberry Pi.
-3. On Raspberry Pi OS, run:
+2. Stop the older chess or reference service before using SPI0/CE0. Copy only
+   the `python/` folder to the Raspberry Pi. You can rename the copied folder.
+3. Open a terminal inside that copied folder on Raspberry Pi OS and run:
 
    ```bash
-   bash rpi/setup.sh
+   bash setup.sh
    ```
 
    The installer needs internet once. It enables SPI, installs the Pi packages,
    creates the Wi-Fi hotspot and installs the `de0cv-chess` service. Reboot if
-   SPI was just enabled. Use `bash rpi/setup.sh --no-hotspot` for existing LAN
+   SPI was just enabled. Use `bash setup.sh --no-hotspot` for existing LAN
    access, or pass `--ssid MyChess --password mychesspassword`.
 4. Join **DE0CV-Chess**, password **fpgachess**, then open
    **http://10.42.0.1:8080**. Wait for **FPGA connected** and start a game.
@@ -120,19 +121,20 @@ systemctl status de0cv-chess
 journalctl -u de0cv-chess -f
 curl -f http://127.0.0.1:8080/healthz
 sudo systemctl stop de0cv-chess
-bash python/run.sh spi --speed 100000 info
+bash run.sh spi --speed 100000 info
 sudo systemctl start de0cv-chess
 ```
 
 The service uses one Gunicorn worker and serializes full command/reply
 exchanges. `CHESS_SPI_SPEED` sets the SPI frequency. Close other SPI users
-before launching the diagnostic or `bash python/run.sh web` manually.
-After moving an installed Pi service, rerun `bash rpi/setup.sh` so systemd
+before launching the diagnostic or `bash run.sh web` manually. Run these Pi
+commands from inside the copied folder.
+After moving an installed Pi service, rerun `bash setup.sh` so systemd
 uses the current folder location.
 
 `rtl/` contains the engine, search memories, SPI endpoint and board wrapper;
-`python/` all host code, Python tools and Python tests; `rpi/` the Pi installer
-and service template; `web/` the current UI; `sim/` the VHDL test benches;
+`python/` the complete Pi app, web UI, installer, Python tools and tests;
+`sim/` the VHDL test benches;
 `tests/` the JavaScript checks; `tools/` build/program/package scripts. Generated
 compiler databases and test tools are excluded from the portable ZIP.
 

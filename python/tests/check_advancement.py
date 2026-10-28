@@ -62,7 +62,7 @@ def check_lines(log,vectors):
 def main():
     ap=argparse.ArgumentParser()
     ap.add_argument('--scalar',required=True);ap.add_argument('--parallel',required=True);ap.add_argument('--pvs',required=True)
-    ap.add_argument('--vectors',default='.cache/cache_vectors.txt');ap.add_argument('--output',default='docs/advancement-results.json')
+    ap.add_argument('--vectors',default='.cache/cache_vectors.txt');ap.add_argument('--output',default='.cache/advancement_results.json')
     ap.add_argument('--queue');ap.add_argument('--special-reference');ap.add_argument('--special-pvs')
     args=ap.parse_args()
     scalar,scalars,_=parse(args.scalar);wide,wides,_=parse(args.parallel)

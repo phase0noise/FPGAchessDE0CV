@@ -84,7 +84,7 @@ def main():
             cases.append(dict(name=f'mate-three-{index + 1}-{"black" if mirrored else "white"}',
                 fen=board.fen(), winning=[move.uci() for move in winning],
                 winningCodes=[encode_move(move) for move in winning]))
-    output = Path(__file__).resolve().parents[2] / '.cache'
+    output = Path(__file__).resolve().parents[1] / '.cache'
     output.mkdir(exist_ok=True)
     (output / 'strength_vectors.txt').write_text('\n'.join(lines) + '\n', encoding='ascii')
     (output / 'strength_oracle.json').write_text(json.dumps(cases, indent=2) + '\n')

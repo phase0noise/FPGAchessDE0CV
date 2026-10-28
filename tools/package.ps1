@@ -3,16 +3,26 @@ $ErrorActionPreference='Stop'
 $projectRoot=Split-Path -Parent $PSScriptRoot
 . "$PSScriptRoot/common.ps1"
 $Python = Resolve-ProjectPython $Python
+$stage = $null
+function Get-PackageFiles {
+    param([string]$Folder)
+    Get-ChildItem -LiteralPath $Folder -File |
+        Where-Object { $_.Extension -ne '.pyc' -and $_.Name -notlike '.env*' }
+    foreach ($directory in (Get-ChildItem -LiteralPath $Folder -Directory)) {
+        if ($directory.Name -in @('.venv','.cache','__pycache__','.git','.pytest_cache','.ruff_cache')) { continue }
+        if ($directory.Attributes -band [IO.FileAttributes]::ReparsePoint) { continue }
+        Get-PackageFiles -Folder $directory.FullName
+    }
+}
 Push-Location $projectRoot
 try {
-    & $Python python/run.py check
+    & $Python python/run.py check-project
     if ($LASTEXITCODE -ne 0) { throw 'Consolidated-project validation failed.' }
     $image='output_files/de0cv_chess.sof'
     if (-not (Test-Path -LiteralPath $image)) { throw 'Build the FPGA image first.' }
     $files=@('README.md','.gitignore','.gitattributes','de0cv_chess.qpf','de0cv_chess.qsf','de0cv_chess.sdc',$image)
-    foreach ($folder in @('rtl','python','rpi','web','tools','sim','tests','docs')) {
-        $files+=Get-ChildItem -LiteralPath $folder -Recurse -File |
-            Where-Object { $_.FullName -notmatch '[\\/](?:__pycache__|\.venv)[\\/]|\.pyc$' } |
+    foreach ($folder in @('rtl','python','tools','sim','tests','docs')) {
+        $files+=Get-PackageFiles -Folder $folder |
             ForEach-Object { $_.FullName.Substring($projectRoot.Length+1).Replace('\','/') }
     }
     $hashes=[ordered]@{}
@@ -40,8 +50,22 @@ try {
         New-Item -ItemType Directory -Path (Split-Path -Parent $destination) -Force | Out-Null
         Copy-Item -LiteralPath (Join-Path $projectRoot $name) -Destination $destination
     }
-    & $Python python/run.py check $stage --manifest
+    & $Python python/run.py check-project $stage --manifest
     if ($LASTEXITCODE -ne 0) { throw 'Standalone release validation failed.' }
     Compress-Archive -LiteralPath $stage -DestinationPath output_files/DE0CVChessAdvanced.zip -Force
+    Compress-Archive -LiteralPath (Join-Path $stage 'python') -DestinationPath output_files/DE0CVChessPython.zip -Force
     Write-Host "Portable project: $projectRoot/output_files/DE0CVChessAdvanced.zip"
-} finally { Pop-Location }
+    Write-Host "Standalone Pi app: $projectRoot/output_files/DE0CVChessPython.zip"
+} finally {
+    Pop-Location
+    if ($stage) {
+        $cacheRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot '.cache'))
+        $temporaryRoot = [IO.Path]::GetFullPath((Split-Path -Parent $stage))
+        if (-not $temporaryRoot.StartsWith($cacheRoot + '\', [StringComparison]::OrdinalIgnoreCase)) {
+            throw 'Refusing to clean a package staging folder outside the project cache.'
+        }
+        if (Test-Path -LiteralPath $temporaryRoot) {
+            Remove-Item -LiteralPath $temporaryRoot -Recurse -Force
+        }
+    }
+}

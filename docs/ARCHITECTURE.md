@@ -43,6 +43,6 @@ browser compares the full hardware legal set against its independent rules,
 validates candidate bounds and the continuation, commits the selected move
 with a matching position generation, and verifies the resulting board.
 
-Pi runtime assets are local files in `web/`; the project has no embedded Pico
+Pi runtime assets are local files in `python/web/`; the project has no embedded Pico
 firmware or external reference-directory dependencies. See the
 [SPI mailbox](SPI_PROTOCOL.md) and [engine payloads](ENGINE_PROTOCOL.md).

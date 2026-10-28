@@ -28,13 +28,13 @@ if (-not (Test-Path -LiteralPath $Ghdl)) { throw 'GHDL not found. Run tools/setu
 Push-Location $projectRoot
 try {
     New-Item -ItemType Directory -Path .cache/ghdl -Force | Out-Null
-    & $Python python/run.py check
+    & $Python python/run.py check-project
     if ($LASTEXITCODE -ne 0) { throw 'Standalone project check failed.' }
     & $Python python/run.py test
     if ($LASTEXITCODE -ne 0) { throw 'Pi SPI/server checks failed.' }
     & $Python python/run.py fixtures --count $Positions
     if ($LASTEXITCODE -ne 0) { throw 'Independent fixtures failed. Install python-chess.' }
-    & $Node tests/rules.test.cjs .cache/rules.json | Out-Host
+    & $Node tests/rules.test.cjs python/.cache/rules.json | Out-Host
     if ($LASTEXITCODE -ne 0) { throw 'Browser rule comparison failed.' }
     & $Node tests/fpga.test.cjs | Out-Host
     if ($LASTEXITCODE -ne 0) { throw 'Browser protocol/verification checks failed.' }
@@ -53,7 +53,7 @@ try {
         & $Ghdl -r --std=08 --workdir=.cache/ghdl tb_de0cv_chess "-gSPI_HALF_NS=$halfPeriod" --assert-level=error
         if ($LASTEXITCODE -ne 0) { throw 'Pin-level SPI/engine integration failed.' }
     }
-    & $Ghdl -r --std=08 --workdir=.cache/ghdl tb_chess_engine '-gVECTOR_FILE=.cache/chess_vectors.txt' -gCLOCK_DIVIDE=4 -gPAWN_LANES=1 --assert-level=error
+    & $Ghdl -r --std=08 --workdir=.cache/ghdl tb_chess_engine '-gVECTOR_FILE=python/.cache/chess_vectors.txt' -gCLOCK_DIVIDE=4 -gPAWN_LANES=1 --assert-level=error
     if ($LASTEXITCODE -ne 0) { throw 'Production VHDL legal-set comparison failed.' }
     if (-not $SkipSearch) { & "$PSScriptRoot/verify_search.ps1" -Python $Python -Ghdl $Ghdl -Strength:$Strength }
     if ($Browser) {

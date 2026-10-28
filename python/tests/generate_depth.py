@@ -27,7 +27,7 @@ def main():
         code = encode_move(move)
         lines.append(' '.join(map(str, [*position_bytes(board), 1, code, *maps,
             -1, -1, 0, code, *position_bytes(after)])))
-    output = Path(__file__).resolve().parents[2] / '.cache/depth_vectors.txt'
+    output = Path(__file__).resolve().parents[1] / '.cache/depth_vectors.txt'
     output.parent.mkdir(exist_ok=True)
     output.write_text('\n'.join(lines) + '\n', encoding='ascii')
     board=chess.Board('8/8/8/8/8/2k5/P7/K7 w - - 0 1')

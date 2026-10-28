@@ -25,7 +25,7 @@ def main():
                   fastCycles=fast_cycles, originalCycles=original_cycles,
                   reductionPercent=round(100 * (1 - fast_cycles / original_cycles), 2),
                   fast=fast, original=original)
-    output = Path(__file__).resolve().parents[2] / '.cache/destination_results.json'
+    output = Path(__file__).resolve().parents[1] / '.cache/destination_results.json'
     output.write_text(json.dumps(report, indent=2) + '\n')
     print(f'PASS: identical moves, scores and nodes; {report["reductionPercent"]}% fewer cycles on {len(fast)} positions.')
 

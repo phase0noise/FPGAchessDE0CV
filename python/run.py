@@ -11,13 +11,13 @@ import sys
 import venv
 
 PYTHON_ROOT = Path(__file__).resolve().parent
-PROJECT_ROOT = PYTHON_ROOT.parent
 VENV_ROOT = PYTHON_ROOT / ".venv"
 VENV_PYTHON = VENV_ROOT / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
 SCRIPTS = {
     "web": "web_app.py",
     "spi": "spi_chess.py",
-    "check": "check_project.py",
+    "check": "check_runtime.py",
+    "check-project": "check_project.py",
     "fixtures": "tests/generate_fixtures.py",
     "search-fixtures": "tests/generate_search.py",
     "depth-fixtures": "tests/generate_depth.py",
@@ -71,7 +71,7 @@ def main(arguments=None):
     if VENV_PYTHON.is_file() and Path(sys.prefix).resolve() != VENV_ROOT.resolve():
         return subprocess.call([str(VENV_PYTHON), str(Path(__file__).resolve()),
                                 options.command, *options.arguments])
-    os.chdir(PROJECT_ROOT)
+    os.chdir(PYTHON_ROOT)
     if options.command == "test":
         return subprocess.call([sys.executable, "-m", "unittest", "discover",
                                 "-s", str(PYTHON_ROOT / "tests"), "-p", "test_*.py",

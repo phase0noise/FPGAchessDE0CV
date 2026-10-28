@@ -1,14 +1,19 @@
 # DE0-CV port validation
 
-Repository cleanup was verified on 2026-10-28 after consolidating every Python
-source under `python/`. The current `tools/verify.ps1 -SkipSearch -Browser`
-run passed: 29 Python tests (one additional Linux-only test skipped on Windows),
+Standalone deployment was verified on 2026-10-28 after moving the complete Pi
+app, web assets, installer and service template into `python/`. The
+`tools/verify.ps1 -SkipSearch -Browser` run passed: 30 Python tests
+(one additional Linux-only test skipped on Windows),
 147 independent browser and production VHDL rule positions, arithmetic,
 memory, exchange, SPI target, 1/5 MHz board-wrapper simulation, browser
 protocol checks, and desktop/mobile browser smoke checks. Relocation tests
-copy the sources into a renamed folder containing spaces and exercise the
-PowerShell launcher, fixtures, web assets and systemd unit rendering from an
-unrelated working directory.
+copy only `python/` into a renamed folder containing spaces, with no sibling
+project files, and exercise the PowerShell launcher, fixtures, web assets,
+systemd unit rendering and the actual HTTP server from an unrelated working
+directory. A separate isolated copy installed a fresh virtual environment and
+passed the same 30 tests, including fetching all six web assets over HTTP.
+The Bash launcher and Pi installer shell syntax also passed on this host.
+Pi installation and physical SPI hardware remain untested on this Windows host.
 
 The existing qualified SOF is retained unchanged, with SHA-256
 `9d231ae8aa7685c4b3960887781fa52f28bbbcd605c7a53d31fe4a9c368341af`.

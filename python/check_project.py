@@ -4,6 +4,7 @@ import argparse
 import hashlib
 import json
 import re
+from check_runtime import check as check_runtime
 
 def check(root, verify_manifest=False):
     root=root.resolve()
@@ -33,13 +34,8 @@ def check(root, verify_manifest=False):
     mapping={name:pin for pin,name in pins}
     assert {name:mapping[name] for name in ['CLOCK_50','RESET_N','SPI_SCLK','SPI_MOSI','SPI_MISO','SPI_CS_N','IRQ_N']}=={
         'CLOCK_50':'PIN_M9','RESET_N':'PIN_P22','SPI_SCLK':'PIN_N16','SPI_MOSI':'PIN_B16','SPI_MISO':'PIN_M16','SPI_CS_N':'PIN_C16','IRQ_N':'PIN_D17'}
-    for name in ['README.md','rpi/setup.sh','python/spi_chess.py','python/web_app.py','python/requirements.txt',
-                 'python/run.py','python/run.ps1','python/run.sh','python/install_service.py',
-                 'python/requirements-dev.txt','python/tests/test_spi_chess.py',
-                 'rpi/de0cv-chess.service.in','web/index.html','web/style.css','web/chess.js','web/fpga.js','web/app.js','web/pieces.png']:
-        assert (root/name).is_file(),f'Missing runtime input: {name}'
-    html=(root/'web/index.html').read_text(encoding='utf8')
-    assert not re.search(r'(?:src|href)=["\']https?://',html),'Page has external runtime assets'
+    check_runtime(root/'python')
+    assert not (root/'rpi').exists() and not (root/'web').exists(), 'Runtime must be contained in python/'
     for folder in (root, *(root/name for name in ('rpi','tools','tests','rtl','sim','web','docs'))):
         assert not list(folder.glob('*.py')), f'Python sources must be consolidated under python/: {folder}'
     for source in (root/'python/spi_chess.py',root/'python/web_app.py'):

@@ -1,7 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict');
-const {Game,uci,decode}=require('../web/chess.js');
-const {Fpga,hex,unhex}=require('../web/fpga.js');
+const {Game,uci,decode}=require('../python/web/chess.js');
+const {Fpga,hex,unhex}=require('../python/web/fpga.js');
 assert.deepEqual(Array.from(unhex(hex([0,255,1,128]))),[0,255,1,128]);
 assert.throws(()=>unhex('xz'));
 function fixture({badLegal=false,badBoard=false,badExplanation=false,badBound=false,badPV=false,badClock=false,wideCycles=false,timeout=false,version=4}={}) {
