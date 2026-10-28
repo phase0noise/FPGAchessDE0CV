@@ -8,6 +8,15 @@ from the copied folder and validates it before installation. The quoted
 The server starts before Wi-Fi changes, and an unavailable FPGA does not
 prevent the web page from loading.
 
+The rebuilt folder ran without installing Python packages on Ubuntu 22.04
+(x86-64) and Ubuntu 24.04 (ARM64). On both, systemd accepted the corrected unit
+and rejected the original quoted-directory form with the non-absolute-path
+error. NetworkManager accepted the hotspot profile with its fixed
+10.42.0.1/24 address. The copied-folder server, page/image requests, status
+and stop commands succeeded. See the
+[Linux startup run](https://github.com/phase0noise/DE0CVChessAdvanced/actions/runs/40754804737).
+These checks do not exercise a physical Pi radio or FPGA SPI wiring.
+
 Standalone deployment was verified on 2026-10-28 after moving the complete Pi
 app, web assets, installer and service template into `python/`. The
 `tools/verify.ps1 -SkipSearch -Browser` run passed: 30 Python tests
