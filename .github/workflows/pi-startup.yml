@@ -39,4 +39,7 @@ jobs:
           fi
       - name: Validate the hotspot settings with NetworkManager
         run: |
-          python3 -c 'import sys,subprocess; sys.path.insert(0,"python"); from pi_start import hotspot_properties; subprocess.run(["nmcli","--offline","connection","add","type","wifi","ifname","wlan0","con-name","de0cv-chess-hotspot","ssid","DE0CV-Chess",*hotspot_properties("wlan0","DE0CV-Chess","fpgachess")],check=True)'
+          sudo systemctl start NetworkManager
+          sudo python3 -c 'import sys,subprocess; sys.path.insert(0,"python"); from pi_start import hotspot_properties; subprocess.run(["nmcli","connection","add","type","wifi","ifname","wlan0","con-name","de0cv-chess-hotspot","ssid","DE0CV-Chess",*hotspot_properties("wlan0","DE0CV-Chess","fpgachess")],check=True)'
+          test "$(nmcli -g ipv4.addresses connection show de0cv-chess-hotspot)" = "10.42.0.1/24"
+          sudo nmcli connection delete de0cv-chess-hotspot

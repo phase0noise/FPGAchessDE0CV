@@ -240,6 +240,7 @@ def main(action="start", arguments=None):
                 return 1
             print("Chess is running. " + " ".join(local_urls(state["port"])))
             return 0
+        print("DE0CV Chess Pi " + (ROOT / "VERSION").read_text(encoding="utf-8").strip(), flush=True)
         if not 1 <= options.port <= 65535:
             parser.error("port must be 1..65535")
         if options.autostart and not is_pi():
