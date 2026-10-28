@@ -7,10 +7,9 @@ Type=simple
 User=@USER@
 Group=@GROUP@
 SupplementaryGroups=spi
-WorkingDirectory="@ROOT@"
 Environment=PYTHONDONTWRITEBYTECODE=1
 Environment=CHESS_SPI_SPEED=1000000
-ExecStart="@ROOT@/.venv/bin/python" "@ROOT@/run.py" serve
+ExecStart=/usr/bin/python3 "@ROOT@/run.py" serve
 Restart=on-failure
 RestartSec=3
 NoNewPrivileges=true

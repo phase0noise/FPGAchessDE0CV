@@ -1,0 +1,42 @@
+name: Pi startup
+on:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  startup:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04-arm]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Linux networking tools
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends network-manager
+          sudo groupadd -f spi
+      - name: Run only the copied folder without installing Python packages
+        shell: bash
+        run: |
+          app="$RUNNER_TEMP/renamed chess folder"
+          cp -a python "$app"
+          cd "$RUNNER_TEMP"
+          python3 "$app/run.py" --lan
+          curl --fail --silent http://127.0.0.1:8080/ > /dev/null
+          curl --fail --silent http://127.0.0.1:8080/pieces.png > /dev/null
+          python3 "$app/run.py" status
+          python3 "$app/run.py" stop
+          python3 "$app/run.py" service-unit "$USER" "$(id -gn)" "$RUNNER_TEMP/de0cv-chess.service"
+          systemd-analyze verify "$RUNNER_TEMP/de0cv-chess.service"
+          sed '/^\[Service\]$/a WorkingDirectory="/tmp/quoted directory"' "$RUNNER_TEMP/de0cv-chess.service" > "$RUNNER_TEMP/old-broken.service"
+          if systemd-analyze verify "$RUNNER_TEMP/old-broken.service"; then
+            echo "The original bad path was unexpectedly accepted"
+            exit 1
+          fi
+      - name: Validate the hotspot settings with NetworkManager
+        run: |
+          python3 -c 'import sys,subprocess; sys.path.insert(0,"python"); from pi_start import hotspot_properties; subprocess.run(["nmcli","--offline","connection","add","type","wifi","ifname","wlan0","con-name","de0cv-chess-hotspot","ssid","DE0CV-Chess",*hotspot_properties("wlan0","DE0CV-Chess","fpgachess")],check=True)'

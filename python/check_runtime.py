@@ -9,7 +9,8 @@ def check(root):
     required = (
         "run.py", "run.sh", "run.ps1", "spi_chess.py", "web_app.py",
         "requirements.txt", "requirements-dev.txt", "setup.sh",
-        "de0cv-chess.service.in", "install_service.py", "README.md",
+        "de0cv-chess.service.in", "install_service.py", "README.md", "pi_start.py",
+        "linux_spi.py", "vendor/flask/__init__.py", "vendor/waitress/__init__.py",
         "web/index.html", "web/style.css", "web/chess.js", "web/fpga.js",
         "web/app.js", "web/pieces.png",
     )

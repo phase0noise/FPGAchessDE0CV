@@ -21,7 +21,7 @@ try {
     $image='output_files/de0cv_chess.sof'
     if (-not (Test-Path -LiteralPath $image)) { throw 'Build the FPGA image first.' }
     $files=@('README.md','.gitignore','.gitattributes','de0cv_chess.qpf','de0cv_chess.qsf','de0cv_chess.sdc',$image)
-    foreach ($folder in @('rtl','python','tools','sim','tests','docs')) {
+    foreach ($folder in @('.github','rtl','python','tools','sim','tests','docs')) {
         $files+=Get-PackageFiles -Folder $folder |
             ForEach-Object { $_.FullName.Substring($projectRoot.Length+1).Replace('\','/') }
     }

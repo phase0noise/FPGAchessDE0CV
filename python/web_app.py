@@ -5,9 +5,12 @@ from __future__ import annotations
 import argparse
 import atexit
 import os
+import sys
 from pathlib import Path
 from threading import RLock
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+sys.path.insert(0, str(Path(__file__).resolve().parent / "vendor"))
 from flask import Flask, jsonify, request, send_from_directory
 from werkzeug.exceptions import RequestEntityTooLarge
 from spi_chess import ChessSPI, SpiCommunicationError, SpiDevice, DEFAULT_SPEED_HZ, engine_status
@@ -88,6 +91,11 @@ def create_app(factory=None):
         return jsonify(device="Raspberry Pi", board="DE0-CV", transport="SPI0/CE0",
                        speed_hz=int(os.environ.get("CHESS_SPI_SPEED", str(DEFAULT_SPEED_HZ))))
 
+    @app.get("/readyz")
+    def ready():
+        return jsonify(app="de0cv-chess", ready=True, pid=os.getpid(),
+                       instance=os.environ.get("CHESS_INSTANCE_ID", ""))
+
     @app.get("/healthz")
     def health():
         try:
@@ -111,4 +119,18 @@ if __name__ == "__main__":
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=8080)
     args = parser.parse_args()
-    app.run(host=args.host, port=args.port, threaded=True, debug=False)
+    from waitress import create_server
+    import uuid
+    from pi_start import read_state, write_state, STATE
+    instance = os.environ.setdefault("CHESS_INSTANCE_ID", uuid.uuid4().hex)
+    server = create_server(app, host=args.host, port=args.port, threads=4, channel_timeout=10)
+    state = read_state()
+    state.update(port=args.port, pid=os.getpid(), instance=instance)
+    write_state(state)
+    print(f"Chess server listening on port {args.port}.", flush=True)
+    try:
+        server.run()
+    finally:
+        server.close()
+        if read_state().get("instance") == instance:
+            STATE.unlink(missing_ok=True)

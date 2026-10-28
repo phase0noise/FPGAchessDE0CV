@@ -11,6 +11,8 @@ import sys
 import venv
 
 PYTHON_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(PYTHON_ROOT))
+sys.path.insert(0, str(PYTHON_ROOT / "vendor"))
 VENV_ROOT = PYTHON_ROOT / ".venv"
 VENV_PYTHON = VENV_ROOT / ("Scripts/python.exe" if os.name == "nt" else "bin/python")
 SCRIPTS = {
@@ -58,36 +60,41 @@ def main(arguments=None):
     if sys.version_info < (3, 10):
         raise SystemExit("Python 3.10 or newer is required.")
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", nargs="?", choices=["setup", "test", "serve", *SCRIPTS])
+    parser.add_argument("command", nargs="?", default="start",
+                        choices=["start", "stop", "status", "setup", "test", "serve", *SCRIPTS])
     parser.add_argument("arguments", nargs=argparse.REMAINDER,
                         help="Options forwarded to the selected command.")
+    arguments = list(sys.argv[1:] if arguments is None else arguments)
+    if arguments and arguments[0].startswith("-") and arguments[0] not in ("-h", "--help"):
+        arguments.insert(0, "start")
     options = parser.parse_args(arguments)
-    if options.command is None:
-        parser.print_help()
-        return 0
+    if options.command in ("start", "stop", "status"):
+        from pi_start import main as start
+        return start(options.command, options.arguments)
     if options.command == "setup":
         return setup(options.arguments)
     # Use modules, never venv console-script shebangs that retain the old folder path.
-    if VENV_PYTHON.is_file() and Path(sys.prefix).resolve() != VENV_ROOT.resolve():
+    developer_commands = {"test", "fixtures", "search-fixtures", "depth-fixtures", "strength-fixtures",
+                          "check-cache", "check-destinations", "check-parallel",
+                          "check-advancement", "check-strength"}
+    if (options.command in developer_commands and VENV_PYTHON.is_file()
+            and Path(sys.prefix).resolve() != VENV_ROOT.resolve()):
         return subprocess.call([str(VENV_PYTHON), str(Path(__file__).resolve()),
                                 options.command, *options.arguments])
     os.chdir(PYTHON_ROOT)
     if options.command == "test":
-        return subprocess.call([sys.executable, "-m", "unittest", "discover",
-                                "-s", str(PYTHON_ROOT / "tests"), "-p", "test_*.py",
-                                "-v", *options.arguments])
+        import unittest
+        suite = unittest.defaultTestLoader.discover(str(PYTHON_ROOT / "tests"), "test_*.py")
+        return 0 if unittest.TextTestRunner(verbosity=2).run(suite).wasSuccessful() else 1
     if options.command == "serve":
-        return subprocess.call([sys.executable, "-m", "gunicorn", "--chdir", str(PYTHON_ROOT),
-                                "--workers", "1", "--threads", "4", "--timeout", "30",
-                                "--bind", "0.0.0.0:8080", "--access-logfile", "-",
-                                *options.arguments, "web_app:app"])
+        options.command = "web"
     script = PYTHON_ROOT / SCRIPTS[options.command]
     sys.path.insert(0, str(script.parent))
     sys.argv = [str(script), *options.arguments]
     try:
         runpy.run_path(str(script), run_name="__main__")
     except ModuleNotFoundError as error:
-        raise SystemExit(f"Missing Python dependency: {error.name}. Run this launcher with setup --dev.") from error
+        raise SystemExit(f"Missing Python dependency: {error.name}. Copy the complete folder, including vendor/.") from error
     return 0
 
 

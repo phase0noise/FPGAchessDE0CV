@@ -34,15 +34,13 @@ web assets, Pi installer and Python tests. **Copy only that folder to the Pi**;
 the rest of this project is for FPGA development. From this project folder on Windows:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File python/run.ps1 setup --dev
-powershell -ExecutionPolicy Bypass -File python/run.ps1 test
-powershell -ExecutionPolicy Bypass -File python/run.ps1 web
+py python/run.py
 ```
 
-On Linux, use `bash python/run.sh setup --dev`, then
-`bash python/run.sh test` or `bash python/run.sh web`. The launcher finds
-the project and its local environment automatically, including after renaming
-or moving the folder. Use the Pi installer below for a complete hardware setup.
+On the Pi, open the copied folder and run `python3 run.py`. The program
+starts the web server and its fixed-address hotspot. Its Python libraries
+are bundled inside the folder. No pip installation or virtual environment
+is needed to play.
 
 ## Wiring and play
 
@@ -68,13 +66,14 @@ The driver accepts 10 kHz through 5 MHz.
 3. Open a terminal inside that copied folder on Raspberry Pi OS and run:
 
    ```bash
-   bash setup.sh
+   python3 run.py
    ```
 
-   The installer needs internet once. It enables SPI, installs the Pi packages,
-   creates the Wi-Fi hotspot and installs the `de0cv-chess` service. Reboot if
-   SPI was just enabled. Use `bash setup.sh --no-hotspot` for existing LAN
-   access, or pass `--ssid MyChess --password mychesspassword`.
+   Use Raspberry Pi OS Bookworm or newer. Startup enables SPI if necessary,
+   starts the server, repairs an old broken chess unit if present, and then
+   activates the Wi-Fi hotspot. If SPI was just enabled, a one-time reboot may
+   be needed. Use `python3 run.py --lan` for existing LAN access, or pass
+   `--ssid MyChess --password mychesspassword`. Add `--autostart` to run on boot.
 4. Join **DE0CV-Chess**, password **fpgachess**, then open
    **http://10.42.0.1:8080**. Wait for **FPGA connected** and start a game.
 
@@ -117,20 +116,19 @@ cache/reference equivalence, PVS bounds, budgets and eight-ply behavior.
 ## Pi diagnostics
 
 ```bash
-systemctl status de0cv-chess
-journalctl -u de0cv-chess -f
+python3 run.py status
 curl -f http://127.0.0.1:8080/healthz
-sudo systemctl stop de0cv-chess
-bash run.sh spi --speed 100000 info
-sudo systemctl start de0cv-chess
+python3 run.py stop
+python3 run.py spi --speed 100000 info
+python3 run.py
 ```
 
-The service uses one Gunicorn worker and serializes full command/reply
+The server uses Waitress and serializes full command/reply
 exchanges. `CHESS_SPI_SPEED` sets the SPI frequency. Close other SPI users
-before launching the diagnostic or `bash run.sh web` manually. Run these Pi
+before launching the diagnostic or `python3 run.py web` manually. Run these Pi
 commands from inside the copied folder.
-After moving an installed Pi service, rerun `bash setup.sh` so systemd
-uses the current folder location.
+After moving the folder, `python3 run.py` regenerates an older installed
+service's paths from the new location.
 
 `rtl/` contains the engine, search memories, SPI endpoint and board wrapper;
 `python/` the complete Pi app, web UI, installer, Python tools and tests;

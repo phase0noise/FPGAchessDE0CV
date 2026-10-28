@@ -1,5 +1,13 @@
 # DE0-CV port validation
 
+The rebuilt Pi entry point starts with `python3 run.py`. Its runtime libraries
+are bundled, and the normal launch does not install a systemd service. When
+an old installed chess unit exists, startup replaces it with a unit generated
+from the copied folder and validates it before installation. The quoted
+`WorkingDirectory` setting that caused the non-absolute-path error is removed.
+The server starts before Wi-Fi changes, and an unavailable FPGA does not
+prevent the web page from loading.
+
 Standalone deployment was verified on 2026-10-28 after moving the complete Pi
 app, web assets, installer and service template into `python/`. The
 `tools/verify.ps1 -SkipSearch -Browser` run passed: 30 Python tests

@@ -52,14 +52,18 @@ class SpiDevice:
         self.lock_file = None
         try:
             import fcntl
-            import spidev
+            try:
+                import spidev
+                SpiDev = spidev.SpiDev
+            except ImportError:
+                from linux_spi import SpiDev
             name = os.path.join(tempfile.gettempdir(), f"de0cv-chess-spi{bus}.{device}.lock")
             self.lock_file = open(name, "a+")
             try:
                 fcntl.flock(self.lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
             except BlockingIOError as error:
                 raise SpiCommunicationError("Another chess process owns this SPI device") from error
-            self.spi = spidev.SpiDev()
+            self.spi = SpiDev()
             self.spi.open(bus, device)
             self.spi.mode = 0
             self.spi.bits_per_word = 8
@@ -69,7 +73,7 @@ class SpiDevice:
             if isinstance(error, SpiCommunicationError):
                 raise
             raise SpiCommunicationError(
-                f"Cannot open SPI{bus}/CE{device}: {error}. Enable SPI and install python3-spidev."
+                f"Cannot open SPI{bus}/CE{device}: {error}. Enable SPI and check device permissions."
             ) from error
 
     def close(self):

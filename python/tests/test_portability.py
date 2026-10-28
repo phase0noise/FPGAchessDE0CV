@@ -90,7 +90,7 @@ class PortabilityTests(unittest.TestCase):
         self.run_command("service-unit", "pi", "pi", str(destination))
         unit = destination.read_text(encoding="utf-8")
         escaped_root = str(self.moved.resolve()).replace("\\", "\\\\")
-        self.assertIn(f'WorkingDirectory="{escaped_root}"', unit)
+        self.assertNotIn("WorkingDirectory=", unit)
         self.assertIn(f'"{escaped_root}/run.py" serve', unit)
         self.assertIn("User=pi\nGroup=pi", unit)
         self.assertNotIn("@ROOT@", unit)
