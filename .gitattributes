@@ -1,0 +1,8 @@
+# Preserve exact file bytes so build_manifest.json hashes survive checkout.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+*.sof binary
+*.pof binary
+*.uf2 binary
+*.png binary
+*.zip binary

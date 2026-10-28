@@ -1,0 +1,19 @@
+[Unit]
+Description=DE0-CV FPGA Chess over Raspberry Pi SPI
+After=network.target
+
+[Service]
+Type=simple
+User=@USER@
+Group=@GROUP@
+SupplementaryGroups=spi
+WorkingDirectory="@ROOT@/python"
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=CHESS_SPI_SPEED=1000000
+ExecStart="@ROOT@/python/.venv/bin/python" "@ROOT@/python/run.py" serve
+Restart=on-failure
+RestartSec=3
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

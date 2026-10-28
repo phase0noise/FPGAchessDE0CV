@@ -1,0 +1,40 @@
+{
+  "source_project": "DE10LiteChess",
+  "source_commit": "dd8bf16811d43ac13b5efc5dd1970b9f18174527",
+  "source_tree_clean": true,
+  "target": "DE0-CV / Cyclone V 5CEBA4F23C7",
+  "engine_protocol": 5,
+  "clock_hz": 50000000,
+  "pawn_file_lanes": 1,
+  "engine_changes": [
+    "M9K RAM/ROM hints changed to M10K",
+    "Device and transport comments updated",
+    "Line endings normalized to LF; chess logic unchanged"
+  ],
+  "engine_files": {
+    "rtl/chess_pkg.vhd": {
+      "source_sha256": "e9b7a722b95b7750bbe9af92972c61545f6b323f24d938fb2ac25f9f2c53d4e7",
+      "port_sha256": "2b49dda86fe121857414a58568b87c0eb9d84cf12dc591c6525afe89a317f169"
+    },
+    "rtl/chess_cell_memory.vhd": {
+      "source_sha256": "5b377f34a8816220a85690c33919a12090fe8f24f1024c362a583bdff0e595ee",
+      "port_sha256": "a8f438d8fb6eb65ff478e950372797d41e879ec3fd2e17dd95ce2fb34cfea988"
+    },
+    "rtl/chess_spatial.vhd": {
+      "source_sha256": "ce13e758682fe4d2780379fa229729b3530e12ef10e17205656fa28991362907",
+      "port_sha256": "ddc5ced509089fd37707660fe582bbf3b653039a03d59d1c63390662fbad7880"
+    },
+    "rtl/chess_search_memory.vhd": {
+      "source_sha256": "8a9eed0facf868165276b9903d91302a19507d3c8b09da2fdb8756e7bf3707eb",
+      "port_sha256": "3be7aab3285d2a815c15880a2c39521b3a4c640d106ea343c7f02f1a9a3e48da"
+    },
+    "rtl/chess_see.vhd": {
+      "source_sha256": "8520f57f829ec897a48bae9c7807db68c5d3ccda232d79e68d8264de2f19c12f",
+      "port_sha256": "8520f57f829ec897a48bae9c7807db68c5d3ccda232d79e68d8264de2f19c12f"
+    },
+    "rtl/chess_engine.vhd": {
+      "source_sha256": "31127b7bfa068410bc31a3189cb23aeed5f174828add2d0f8608f218971447cd",
+      "port_sha256": "3752012a1ac888472c1c12805199778963a86fa2707e0afe40714eacb43ec694"
+    }
+  }
+}

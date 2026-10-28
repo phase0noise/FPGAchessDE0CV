@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111c18">
+  <title>FPGA Chess</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="/" aria-label="FPGA Chess home"><span class="brand-mark" aria-hidden="true">♞</span><span>FPGA <b>Chess</b></span></a>
+    <div class="header-actions"><span class="hardware-tag">DE0-CV <span>×</span> RASPBERRY PI</span><button id="theme" class="theme-toggle" type="button" aria-label="Switch to light theme">Light mode</button></div>
+  </header>
+  <main>
+    <section class="play-area" aria-label="Chess game">
+      <div class="board-heading"><div><p class="eyebrow">CHESS, BUILT INTO THE CIRCUIT</p><h1>Your move. Silicon’s reply.</h1></div><button id="flip" class="icon-button" title="Flip board" aria-label="Flip board">⇅</button></div>
+      <div class="player-bar opponent"><span class="avatar" aria-hidden="true">♜</span><div><strong id="opponent-name">The FPGA</strong><small id="opponent-caption">Spatial intuition + search</small></div><span id="engine-color" class="color-chip">BLACK</span></div>
+      <div class="board-frame"><div id="board" class="board" role="grid" aria-label="Chessboard"></div></div>
+      <div class="player-bar"><span class="avatar human" aria-hidden="true">♙</span><div><strong id="player-name">You</strong><small id="human-caption">Playing white</small></div><span id="turn-label" class="turn-label">Your move</span></div>
+      <div id="round-clock" class="round-clock" hidden><div><span id="clock-caption">YOUR MOVE · SPATIAL TAKES OVER AT ZERO</span><strong id="clock-time" role="timer">10 s</strong></div><progress id="clock-progress" max="10" value="10" aria-label="Time remaining for your move"></progress></div>
+      <section class="captures-card" aria-label="Captured pieces"><div class="section-heading"><h2>Off the board</h2><span id="material-balance">Material equal</span></div><div class="capture-row"><span class="capture-label">Taken by White</span><div id="white-captures" class="captured-pieces"></div><strong id="white-points">0 pts</strong></div><div class="capture-row"><span class="capture-label">Taken by Black</span><div id="black-captures" class="captured-pieces"></div><strong id="black-points">0 pts</strong></div><p class="piece-values">Pawn 1 · Knight 3 · Bishop 3 · Rook 5 · Queen 9</p></section>
+      <p class="board-note">Drag a piece, or tap a piece and its destination.</p>
+    </section>
+    <aside class="sidebar">
+      <section class="status-card">
+        <div class="connection-row"><span id="connection" class="connection"><i></i>Connecting to FPGA</span><button id="connect" class="text-button">Reconnect</button></div>
+        <h2 id="status" aria-live="polite">Setting up the board…</h2>
+        <p id="message" class="message" role="status">Your phone is the board. The FPGA is the opponent.</p>
+        <div class="settings-row"><label for="mode" class="wide-setting">Game mode<select id="mode"><option value="human">You vs FPGA</option><option value="watch">FPGA vs FPGA</option><option value="local">Pass &amp; play</option><option value="speed">Speed round</option></select></label><p id="mode-help" class="setting-help">Make your move. The FPGA finds its reply.</p><label for="side" id="side-setting">Play as<select id="side"><option value="0">White</option><option value="1">Black</option></select></label><label for="round-seconds" id="round-setting" hidden>Your move timer<select id="round-seconds"><option value="5">5 seconds</option><option value="10" selected>10 seconds</option><option value="15">15 seconds</option><option value="30">30 seconds</option></select></label><label for="depth">Search depth<select id="depth"><option value="0">Spatial · no tree</option><option value="2">2 ply</option><option value="3">3 ply</option><option value="4">4 ply</option><option value="5" selected>5 ply</option><option value="6">6 ply</option><option value="7">7 ply</option><option value="8">8 ply</option></select></label><label for="time" class="time-setting">FPGA think budget<select id="time"><option value="3">3 seconds</option><option value="10" selected>10 seconds</option><option value="20">20 seconds</option><option value="30">30 seconds</option></select></label></div>
+        <button id="new-game" class="primary-button">New game <span aria-hidden="true">↗</span></button>
+        <div class="actions"><button id="undo">Undo turn</button><button id="resume">Play FPGA turn</button><button id="stop" hidden>Stop thinking</button></div>
+        <button id="claim" class="text-button" hidden>Claim draw</button>
+      </section>
+      <section class="moves-card"><div class="section-heading"><h2>Move record</h2><button id="download" class="text-button">Save PGN ↓</button></div><div id="moves" class="moves" aria-label="Move history"><p class="empty-moves">The first move is yours.</p></div></section>
+      <p class="offline-note">Your board, your Wi-Fi. No internet needed.</p>
+    </aside>
+    <section id="engine-console" class="engine-console" aria-label="FPGA engine statistics">
+      <div class="console-heading"><div><p class="eyebrow">INSIDE THE CYCLONE V</p><h2>Watch the circuit think.</h2></div><span id="engine-state" class="engine-state">Idle</span></div>
+      <div id="engine-pipeline" class="engine-pipeline" aria-label="Move processing stages"><span data-stage="upload">Position</span><span data-stage="field">Spatial field</span><span data-stage="search">Search</span><span data-stage="verify">Verify</span><span data-stage="commit">Play</span></div>
+      <div class="metrics"><div><strong id="decision">—</strong><span>FPGA decision time</span></div><div><strong id="nodes">—</strong><span>nodes explored</span></div><div><strong id="search-depth">—</strong><span>completed / target depth</span></div><div><strong id="node-rate">—</strong><span>nodes / FPGA second</span></div><div><strong id="cutoffs">—</strong><span>alpha-beta cutoffs</span></div><div><strong id="cache-hits">—</strong><span>matching cache probes</span></div><div><strong id="cache-stores">—</strong><span>cache writes</span></div><div><strong id="legal-count">—</strong><span>legal root moves</span></div><div><strong id="engine-clock">—</strong><span>internal clock / evaluation lanes</span></div><div><strong id="tactical-depth">—</strong><span>deepest visited ply</span></div><div><strong id="cache-cutoffs">—</strong><span>cache answers / root re-searches</span></div><div><strong id="see-calls">—</strong><span>capture exchanges analyzed</span></div></div>
+      <div id="phase-profile" class="phase-profile" hidden><div class="section-heading"><h3>Where the clocks go</h3><span>Measured on the FPGA</span></div><div id="phase-bar" class="phase-bar" role="img" aria-label="FPGA cycles by processing phase"></div><div id="phase-legend" class="phase-legend"></div></div>
+      <p id="pv-line" class="pv-line">The captured continuation appears after a completed search.</p>
+      <div class="console-panels"><div class="search-panel"><div class="section-heading"><h3>Search trace</h3><span id="search-detail">Waiting for a move</span></div><svg id="search-trace" viewBox="0 0 400 90" role="img" aria-label="Search nodes over FPGA decision time"><path d="M0 29H400 M0 59H400 M0 89H400" class="trace-grid"/><polyline id="trace-line" points="0,89"/></svg><p id="trace-caption" class="console-note">Measured nodes over FPGA time. Samples arrive over SPI.</p><div class="section-heading"><h3>Candidate results</h3><span id="score-kind">FPGA scores</span></div><div id="candidates" class="candidate-list"><p class="console-note">A sample of root candidates appears after a search.</p></div><p class="console-note">Search bounds are marked ≤ or ≥. Scores are not win probabilities.</p></div><div class="field-panel"><div class="section-heading"><h3>Spatial field</h3><span id="field-range">No snapshot yet</span></div><div id="field-board" class="field-board" role="img" aria-label="Last completed recurrent field, White at bottom"></div><p class="console-note">Last completed FPGA snapshot · White at bottom.<br>Amber = negative · Green = positive activation.</p><div class="section-heading"><h3>Chosen move breakdown</h3><span id="chosen-move">—</span></div><div id="score-parts" class="score-parts"><p class="console-note">Search, captures, safety, activity, field, habit and noise.</p></div></div></div>
+      <div class="hardware-line"><span>50 MHz reference</span><span>64 spatial cells</span><span>4,096 cache entries</span><span id="quiescence">Up to 4 extension plies</span></div>
+    </section>
+  </main>
+  <footer>FPGA CHESS <span>A chess engine you can hold in your hands.</span></footer>
+  <dialog id="promotion"><h2>Choose your promotion</h2><div id="promotion-options"></div><button id="promotion-cancel">Cancel</button></dialog>
+  <script src="chess.js"></script>
+  <script src="fpga.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

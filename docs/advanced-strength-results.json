@@ -1,0 +1,59 @@
+{
+  "scope": "Completed five-ply mate choices on both colors; remaining optional long simulations stopped. No Elo claim.",
+  "completedCases": 2,
+  "benchmarkCases": 12,
+  "normalDepth": 5,
+  "quiescence": 0,
+  "simulationClockHz": 50000000,
+  "qualifiedBoardClockHz": 75000000,
+  "sourceSha256": {
+    "rtl/chess_pkg.vhd": "e9b7a722b95b7750bbe9af92972c61545f6b323f24d938fb2ac25f9f2c53d4e7",
+    "rtl/chess_engine.vhd": "31127b7bfa068410bc31a3189cb23aeed5f174828add2d0f8608f218971447cd",
+    "rtl/chess_search_memory.vhd": "8a9eed0facf868165276b9903d91302a19507d3c8b09da2fdb8756e7bf3707eb",
+    "rtl/chess_see.vhd": "8520f57f829ec897a48bae9c7807db68c5d3ccda232d79e68d8264de2f19c12f"
+  },
+  "cases": [
+    {
+      "name": "mate-three-1-white",
+      "fen": "7k/8/8/6Q1/5K2/8/8/8 w - - 0 1",
+      "winning": [
+        "f4e5",
+        "f4f5"
+      ],
+      "winningCodes": [
+        2333,
+        2397
+      ]
+    },
+    {
+      "name": "mate-three-1-black",
+      "fen": "8/8/8/5k2/6q1/8/8/7K b - - 0 1",
+      "winning": [
+        "f5e4",
+        "f5f4"
+      ],
+      "winningCodes": [
+        1829,
+        1893
+      ]
+    }
+  ],
+  "positions": [
+    {
+      "position": 0,
+      "best": 2333,
+      "depth": 5,
+      "nodes": 18211,
+      "cacheHits": 11936,
+      "cycles": 6513852
+    },
+    {
+      "position": 1,
+      "best": 1829,
+      "depth": 5,
+      "nodes": 20047,
+      "cacheHits": 12911,
+      "cycles": 7185176
+    }
+  ]
+}

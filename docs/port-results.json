@@ -1,0 +1,64 @@
+{
+  "date": "2026-10-25",
+  "target": "DE0-CV / Cyclone V 5CEBA4F23C7",
+  "engine_protocol": 5,
+  "clock_hz": 50000000,
+  "controller_clock_divide": 4,
+  "pawn_file_lanes": 1,
+  "optimization_mode": "AGGRESSIVE AREA",
+  "timing_qualified": true,
+  "worst_slack_ns": {
+    "setup": 3.813,
+    "hold": 0.104,
+    "recovery": null,
+    "removal": null
+  },
+  "operating_condition_slacks": [
+    {
+      "corner": "Slow 1100mV 85C Model",
+      "check": "setup",
+      "slack_ns": 3.813
+    },
+    {
+      "corner": "Slow 1100mV 85C Model",
+      "check": "hold",
+      "slack_ns": 0.251
+    },
+    {
+      "corner": "Slow 1100mV 0C Model",
+      "check": "setup",
+      "slack_ns": 4.215
+    },
+    {
+      "corner": "Slow 1100mV 0C Model",
+      "check": "hold",
+      "slack_ns": 0.207
+    },
+    {
+      "corner": "Fast 1100mV 85C Model",
+      "check": "setup",
+      "slack_ns": 11.152
+    },
+    {
+      "corner": "Fast 1100mV 85C Model",
+      "check": "hold",
+      "slack_ns": 0.133
+    },
+    {
+      "corner": "Fast 1100mV 0C Model",
+      "check": "setup",
+      "slack_ns": 12.129
+    },
+    {
+      "corner": "Fast 1100mV 0C Model",
+      "check": "hold",
+      "slack_ns": 0.104
+    }
+  ],
+  "physical_board_tested": false,
+  "bitstream_bytes": 2441504,
+  "bitstream_sha256": "9d231ae8aa7685c4b3960887781fa52f28bbbcd605c7a53d31fe4a9c368341af",
+  "base_verification_passed": true,
+  "expanded_search_verification_passed": true,
+  "desktop_mobile_browser_passed": true
+}

@@ -1,0 +1,96 @@
+{
+  "scope": "Two deterministic three-ply fork/promotion fixtures; positional terms and SEE disabled to isolate changes; no strength rating",
+  "positions": 2,
+  "candidateBoundsChecked": 18,
+  "legalPvPrefixesChecked": 42,
+  "cycles": {
+    "scalar": 1573992,
+    "fourLanes": 1298280,
+    "fourLanesAndPvs": 345508,
+    "fourLanesPvsAndQueue": 276828
+  },
+  "laneCycleReduction": 0.17516734519616362,
+  "pvsAdditionalCycleReduction": 0.7338725082416736,
+  "scalar": [
+    {
+      "position": 0,
+      "best": 2915,
+      "depth": 3,
+      "nodes": 1243,
+      "cacheHits": 469,
+      "cycles": 1391340,
+      "score": 0
+    },
+    {
+      "position": 1,
+      "best": 24112,
+      "depth": 3,
+      "nodes": 193,
+      "cacheHits": 62,
+      "cycles": 182652,
+      "score": 903
+    }
+  ],
+  "fourLanes": [
+    {
+      "position": 0,
+      "best": 2915,
+      "depth": 3,
+      "nodes": 1243,
+      "cacheHits": 469,
+      "cycles": 1152684,
+      "score": 0
+    },
+    {
+      "position": 1,
+      "best": 24112,
+      "depth": 3,
+      "nodes": 193,
+      "cacheHits": 62,
+      "cycles": 145596,
+      "score": 903
+    }
+  ],
+  "pvs": [
+    {
+      "position": 0,
+      "best": 2915,
+      "depth": 3,
+      "nodes": 342,
+      "cacheHits": 131,
+      "cycles": 242804,
+      "score": 0
+    },
+    {
+      "position": 1,
+      "best": 24112,
+      "depth": 3,
+      "nodes": 146,
+      "cacheHits": 36,
+      "cycles": 102704,
+      "score": 903
+    }
+  ],
+  "fourBankQueue": [
+    {
+      "position": 0,
+      "best": 2915,
+      "depth": 3,
+      "nodes": 342,
+      "cacheHits": 131,
+      "cycles": 197240,
+      "score": 0
+    },
+    {
+      "position": 1,
+      "best": 24112,
+      "depth": 3,
+      "nodes": 146,
+      "cacheHits": 36,
+      "cycles": 79588,
+      "score": 903
+    }
+  ],
+  "specialRulePositions": 17,
+  "specialRuleBoundsChecked": 237
+}

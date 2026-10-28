@@ -1,0 +1,105 @@
+DE0-CV advanced chess build qualification
+Date: 2026-10-25
+Target: Cyclone V 5CEBA4F23C7
+Clock: native 50 MHz, controller enable every four clocks
+Transport: Raspberry Pi SPI0 / CE0, mode 0, default 1 MHz
+Engine: protocol 5 / SCF2 / eight-ply maximum / four evaluation and queue lanes
+Pawn-file arithmetic: one lane (the existing PAWN_LANES=1 configuration)
+Compiler optimization: AGGRESSIVE AREA (part of the qualified configuration)
+
+Fitter Status : Successful - Sun Oct 25 20:11:23 2026
+Quartus Prime Version : 23.1std.1 Build 993 05/14/2024 SC Lite Edition
+Revision Name : de0cv_chess
+Top-level Entity Name : de0cv_chess
+Family : Cyclone V
+Device : 5CEBA4F23C7
+Timing Models : Final
+Logic utilization (in ALMs) : 18,037 / 18,480 ( 98 % )
+Total registers : 13889
+Total pins : 61 / 224 ( 27 % )
+Total virtual pins : 0
+Total block memory bits : 986,520 / 3,153,920 ( 31 % )
+Total RAM Blocks : 128 / 308 ( 42 % )
+Total DSP Blocks : 51 / 66 ( 77 % )
+Total HSSI RX PCSs : 0
+Total HSSI PMA RX Deserializers : 0
+Total HSSI TX PCSs : 0
+Total HSSI PMA TX Serializers : 0
+Total PLLs : 0 / 4 ( 0 % )
+Total DLLs : 0 / 4 ( 0 % )
+
+Timing acceptance across all available operating conditions:
+  Slow 1100mV 85C Model: setup 3.813 ns
+  Slow 1100mV 85C Model: hold 0.251 ns
+  Slow 1100mV 0C Model: setup 4.215 ns
+  Slow 1100mV 0C Model: hold 0.207 ns
+  Fast 1100mV 85C Model: setup 11.152 ns
+  Fast 1100mV 85C Model: hold 0.133 ns
+  Fast 1100mV 0C Model: setup 12.129 ns
+  Fast 1100mV 0C Model: hold 0.104 ns
+
+Worst slacks (ns): setup=3.813, hold=0.104, recovery=N/A (no paths), removal=N/A (no paths)
+
+Compiler timing summary:
+------------------------------------------------------------
+Timing Analyzer Summary
+------------------------------------------------------------
+
+Type  : Slow 1100mV 85C Model Setup 'board_clock'
+Slack : 3.813
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Hold 'board_clock'
+Slack : 0.251
+TNS   : 0.000
+
+Type  : Slow 1100mV 85C Model Minimum Pulse Width 'board_clock'
+Slack : 8.776
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Setup 'board_clock'
+Slack : 4.215
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Hold 'board_clock'
+Slack : 0.207
+TNS   : 0.000
+
+Type  : Slow 1100mV 0C Model Minimum Pulse Width 'board_clock'
+Slack : 8.826
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Setup 'board_clock'
+Slack : 11.152
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Hold 'board_clock'
+Slack : 0.133
+TNS   : 0.000
+
+Type  : Fast 1100mV 85C Model Minimum Pulse Width 'board_clock'
+Slack : 8.473
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Setup 'board_clock'
+Slack : 12.129
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Hold 'board_clock'
+Slack : 0.104
+TNS   : 0.000
+
+Type  : Fast 1100mV 0C Model Minimum Pulse Width 'board_clock'
+Slack : 8.425
+TNS   : 0.000
+
+------------------------------------------------------------
+
+The build script accepted all setup/hold/recovery/removal checks and zero
+illegal clocks, unconstrained clocks, unconstrained inputs and unconstrained outputs.
+Source hashes matched the isolated compilation snapshot before image publication.
+
+SOF size: 2441504 bytes
+SOF SHA-256: 9d231ae8aa7685c4b3960887781fa52f28bbbcd605c7a53d31fe4a9c368341af
+
+Physical board acceptance has not been performed. See VALIDATION.md.
