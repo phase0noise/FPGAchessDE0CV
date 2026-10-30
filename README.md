@@ -1,9 +1,4 @@
-# Advanced FPGA Chess — DE0-CV + Raspberry Pi SPI
-
-Open **`de0cv_chess.qpf`** in Quartus Prime Lite 23.1 with Cyclone V support.
-This standalone project targets **DE0-CV / 5CEBA4F23C7** and contains the current
-DE10-Lite chess engine, adapted to M10K memories and the Raspberry Pi SPI link.
-All build inputs and runtime files are inside this folder.
+# FPGA Chess Engine — DE0-CV + Raspberry Pi SPI
 
 The FPGA generates and verifies legal moves, runs the recurrent spatial field,
 and chooses moves with iterative alpha-beta search up to **eight plies**.
@@ -15,24 +10,12 @@ web board; the browser independently checks hardware moves and board readback.
 
 This port uses the DE0-CV's native **50 MHz** clock, with the controller enabled
 every four clocks. SPI, RAM and the engine share this clock domain. Pawn-file
-evaluation uses one lane to save duplicated arithmetic; the main four
-evaluation/hash lanes and four move banks remain. Think budgets and displayed
-timing use the reported clock.
-The DE10-Lite's 75 MHz fit measurements do not describe this port. See
-[build results](docs/build-results.txt) and [validation](docs/VALIDATION.md)
-for this project's own checks and physical-board status.
-
-# DE10-Lite Chess
-
-A VHDL chess engine for the DE10-Lite's MAX 10 FPGA. Its spatial attack fabric
-is a wired 64-square network that computes attacks and piece reach for each
-position. The search controller uses that network to generate legal moves and
-explore replies with alpha-beta pruning. A Pico W serves the board over local
-Wi-Fi.
+evaluation uses one lane to save duplicated arithmetic.
 
 
 ## Features
 
+- Raspberry Pi Zero 2 W or many other Microcontrolers, can host or connect to a wifi network and play chess against the FPGA
 - Play White or Black against the FPGA, watch it play both sides, or play locally
   with another person.
 - Set search depth from 2 to 8 plies and choose a time limit. Defaults are
