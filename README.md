@@ -12,6 +12,8 @@ This port uses the DE0-CV's native **50 MHz** clock, with the controller enabled
 every four clocks. SPI, RAM and the engine share this clock domain. Pawn-file
 evaluation uses one lane to save duplicated arithmetic.
 
+Feel free to use, modify, or play chess against this project
+
 
 <img width="720" height="1600" alt="1000000168" src="https://github.com/user-attachments/assets/ef52a3f2-86c7-4ef2-b02a-ccb8d62aa0aa" />
 
@@ -165,38 +167,6 @@ Recurrent-field, habit and noise terms do not contribute to those scores. The
 field is still computed for the console heatmap, which is why a field snapshot
 appears even during an ordinary search.
 
-## Playing
-
-The Pico W hosts the page, scripts and piece artwork. Once connected, play
-needs no internet access. The browser keeps game history and clocks, compares
-the FPGA's legal moves with its own rules, and checks the board after the
-chosen move is committed.
-
-Connect these **3.3 V** UART signals and share ground:
-
-| Pico W | DE10-Lite GPIO header |
-| --- | --- |
-| GP0 / TX, physical pin 1 | GPIO[8] / RX, FPGA pin W6 |
-| GP1 / RX, physical pin 2 | GPIO[4] / TX, FPGA pin V8 |
-| GND | GND |
-
-1. Load [de10_chess.sof](output_files/de10_chess.sof) with Quartus Programmer.
-   The device is **10M50DAF484C7G**.
-2. Hold **BOOTSEL** while plugging in the Pico W, then copy
-   [pico_chess.uf2](output_files/pico_chess.uf2) to its **RPI-RP2** drive.
-3. Join **FPGA-Chess**, password **fpgachess**.
-4. Open **http://192.168.4.1/** and wait for the FPGA connection.
-   Pico USB serial at 115200 baud prints the address at startup.
-
-Load matching FPGA and Pico images. Reload the SOF after the DE10-Lite loses
-power. If the page opens but the engine does not connect, check TX/RX and
-ground, press **KEY0** on the DE10-Lite and reconnect.
-
-## FPGA footprint
-
-The recorded October 24, 2026 implementation uses the board's 50 MHz reference
-and a PLL to run at 75 MHz. The search controller advances every four clocks;
-UART, RAM ports and the capture exchange pipeline use the native clock.
 
 | Resource | Usage |
 | --- | --- |
