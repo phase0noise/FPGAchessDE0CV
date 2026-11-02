@@ -13,6 +13,9 @@ every four clocks. SPI, RAM and the engine share this clock domain. Pawn-file
 evaluation uses one lane to save duplicated arithmetic.
 
 
+<img width="720" height="1600" alt="1000000168" src="https://github.com/user-attachments/assets/ef52a3f2-86c7-4ef2-b02a-ccb8d62aa0aa" />
+
+
 ## Features
 
 - Raspberry Pi Zero 2 W or many other Microcontrolers, can host or connect to a wifi network and play chess against the FPGA
